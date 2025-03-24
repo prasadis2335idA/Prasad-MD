@@ -1,0 +1,36 @@
+# This workflow will build a Node.js project and deploy it to an Azure Functions App on Windows or Linux when a commit is pushed to your default branch.
+#
+# This workflow assumes you have already created the target Azure Functions app.
+# name: Node.js CI
+
+on:
+ push:
+   branches:
+main
+ pull_request:
+   branches:
+main
+
+jobs:
+ build:
+
+   runs-on: ubuntu-latest
+
+   strategy:
+     matrix:
+       node-version: [20.x]
+
+   steps:
+name: Checkout repository
+     uses: actions/checkout@v3
+
+name: Set up Node.js
+     uses: actions/setup-node@v3
+     with:
+       node-version: ${{ matrix.node-version }}
+
+name: Install dependencies
+     run: npm install
+
+name: Start application
+     run: npm start        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }} # Remove publish-profile to use Azure RBAC
